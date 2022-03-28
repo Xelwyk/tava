@@ -16,15 +16,15 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "tava.arm",
-				"title": "Arm"
+				"command": "tava.setTargetInterval",
+				"title": "Tava: Set Target Interval"
 			}
 		],
 		"configuration":[
 			{
 				"title": "Tava",
 				"properties": {
-					"tava.changeColorWhenInterval": {
+					"tava.targetInterval": {
 						"type": "integer",
 						"default": 60000,
 						"description": "if time difference between timestamps is bigger than this value it changes color for coloring timestamps"
