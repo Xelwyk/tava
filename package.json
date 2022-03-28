@@ -16,18 +16,19 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "tava.helloWorld",
-				"title": "Hello World"
+				"command": "tava.arm",
+				"title": "Arm"
 			}
 		],
-		"colors": [
+		"configuration":[
 			{
-				"id": "match.1",
-				"description": "match block",
-				"defaults": {
-					"dark": "#410000ad",
-					"light": "#ff00005d",
-					"highContrast": "#ff0000"
+				"title": "Tava",
+				"properties": {
+					"tava.changeColorWhenInterval": {
+						"type": "integer",
+						"default": 60000,
+						"description": "if time difference between timestamps is bigger than this value it changes color for coloring timestamps"
+					}
 				}
 			}
 		]
