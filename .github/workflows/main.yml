@@ -22,7 +22,7 @@ jobs:
           git config --local user.name "github-actions"
           git add --all
           git commit -m "action: release package"
-          if [-z "$(git status --porcelain)"]; then
+          if [[ -z "$(git status --porcelain)" ]]; then
             echo "::set-output name=push::false"
           else
             git commit -m "action: release" -a
