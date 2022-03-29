@@ -6,12 +6,12 @@ import * as vscode from 'vscode';
 import ConfigurationController = require("./configurator");
 
 let decoration1 = vscode.window.createTextEditorDecorationType({
-	backgroundColor: "#098A0080",
-	opacity: "100%"
+	backgroundColor: "#ffc20080",
+	color: "#000000"
 });
 let decoration2 = vscode.window.createTextEditorDecorationType({
-	backgroundColor: "#8A000080",
-	opacity: "100%"
+	backgroundColor: "#0078ff80",
+	color: "#ffffff"
 });
 
 // this method is called when your extension is activated
