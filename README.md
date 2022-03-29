@@ -9,7 +9,7 @@ Timestamp Analysis Visual Aid - color codes groups of ISO 8601 timestamps based 
 
 ## Features
 
-separates timestamps into groups based on targeted interval which indicated when the new group has started and colors them in alternating pattern
+Separates timestamps into groups based on targeted interval which indicated when the new group has started and colors them in alternating pattern
 
 For example, without plugin:
 
