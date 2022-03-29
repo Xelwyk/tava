@@ -9,7 +9,7 @@ Timestamp Analysis Visual Aid - color codes groups of ISO 8601 timestamps based 
 
 ## Features
 
-Separates timestamps into groups based on targeted interval which indicated when the new group has started and colors them in alternating pattern
+Separates timestamps into groups based on targeted interval of separation and colors them in alternating pattern
 
 For example, without plugin:
 
@@ -49,12 +49,18 @@ I've never done anything in typescript and I've sacrificed my sleep to write thi
 - doesn't know how to handle malformed lines
 - minimap doesn't want to color timestamp portions
 - codebase needs cleanup and improvement
+- possible memory leaks?
 
 ## Release Notes
+
+### 1.0.1
+
+main.yml for automated packaging and readme tweaks
 
 ### 1.0.0
 
 Initial release of T.A.V.A.
+
 
 ---
 
