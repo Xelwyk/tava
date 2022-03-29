@@ -2,7 +2,7 @@
   "name": "tava",
 	"displayName": "T.A.V.A.",
 	"description": "Timestamp Analysis Visual Aid",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"engines": {
 		"vscode": "^1.65.0"
 	},

@@ -34,6 +34,8 @@ with plugin, 60000ms target interval:
 
 `code --install-extension tava-x.x.x.vsix`
 
+_tava-x.x.x.vsix_ files are available in _dist_ directory
+
 ## Extension Settings
 
 This extension contributes the following settings:
