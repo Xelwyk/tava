@@ -39,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
 		};
 		let newInterval = await vscode.window.showInputBox(opts);
 		config.setInterval(parseInt(newInterval!));
-		});
+	});
 
 	context.subscriptions.push(disposableOpenAction);
 	context.subscriptions.push(disposableChangeAction);

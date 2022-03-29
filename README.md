@@ -1,5 +1,7 @@
 # Tava README
 
+>WARNING: this extension is in alpha
+
 T.A.V.A.
 
 Timestamp Analysis Visual Aid - color codes groups of ISO 8601 timestamps based on target interval
@@ -27,6 +29,10 @@ with plugin, 60000ms target interval:
 
 - VSCode
 - ISO 8601 timestamps
+
+## Installation
+
+`code --install-extension tava-x.x.x.vsix`
 
 ## Extension Settings
 
