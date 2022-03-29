@@ -1,0 +1,16 @@
+# This is a basic workflow to help you get started with Actions
+
+on:
+  push:
+    branches:
+      - master
+name: Deploy
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - uses: lannonbr/vsce-action@3.0.0
+        with:
+          args: "package"
