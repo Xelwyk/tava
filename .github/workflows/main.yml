@@ -14,3 +14,6 @@ jobs:
       - uses: lannonbr/vsce-action@3.0.0
         with:
           args: "package"
+      - uses: actions/upload-artifact@v3
+        with:
+          path: dist
