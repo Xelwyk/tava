@@ -20,8 +20,16 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	console.log('extension "tava" is now active!');
 
+	var changeTimeout: NodeJS.Timeout;
+
 	let disposableOpenAction = vscode.workspace.onDidOpenTextDocument(doTheMagic);
-	let disposableChangeAction = vscode.workspace.onDidChangeTextDocument(doTheMagic);
+	let disposableChangeAction = vscode.workspace.onDidChangeTextDocument( event => {
+		clearTimeout(changeTimeout);
+		changeTimeout = setTimeout(() => {
+			doTheMagic(event);
+		}, 500);
+	});
+	let disposableChangeActiveAction = vscode.window.onDidChangeActiveTextEditor(doTheMagic);
 
 	let disposableSetIntervalCommand = vscode.commands.registerCommand("tava.setTargetInterval", async () => {
 		const config = new ConfigurationController();
@@ -44,14 +52,21 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposableOpenAction);
 	context.subscriptions.push(disposableChangeAction);
 	context.subscriptions.push(disposableSetIntervalCommand);
+	context.subscriptions.push(disposableChangeActiveAction);
+
+	doTheMagic(undefined);
 }
 
-function doTheMagic(event: vscode.TextDocumentChangeEvent | vscode.TextDocument) {
+function doTheMagic(event: vscode.TextDocumentChangeEvent | vscode.TextDocument | vscode.TextEditor | undefined) {
 	console.log("magic happening");
 	
 	const config = new ConfigurationController();
+	
 	let editor = vscode.window.activeTextEditor;
 	let doc = editor?.document;
+	if (event !== undefined && "lineCount" in event) {
+		doc = event;
+	}
 	let anchor = new vscode.Position(0,0);
 	let date1 = 0;
 	let date2 = 0;
