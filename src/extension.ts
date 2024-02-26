@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { defaultCachePath } from '@vscode/test-electron/out/download';
-import { createCipheriv } from 'crypto';
+//import { defaultCachePath } from '@vscode/test-electron/out/download';
+//import { createCipheriv } from 'crypto';
 import * as vscode from 'vscode';
 import ConfigurationController = require("./configurator");
 
@@ -20,41 +20,43 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	console.log('extension "tava" is now active!');
 
-	var changeTimeout: NodeJS.Timeout;
+	//note to self: timeout executes function after specified time
+	var timeoutId: NodeJS.Timeout;
 
 	let disposableOpenAction = vscode.workspace.onDidOpenTextDocument(doTheMagic);
+	let disposableChangeActiveAction = vscode.window.onDidChangeActiveTextEditor(doTheMagic);
 	let disposableChangeAction = vscode.workspace.onDidChangeTextDocument( event => {
-		clearTimeout(changeTimeout);
-		changeTimeout = setTimeout(() => {
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => {
 			doTheMagic(event);
 		}, 500);
 	});
-	let disposableChangeActiveAction = vscode.window.onDidChangeActiveTextEditor(doTheMagic);
-
-	let disposableSetIntervalCommand = vscode.commands.registerCommand("tava.setTargetInterval", async () => {
-		const config = new ConfigurationController();
-		let opts: vscode.InputBoxOptions = {};
-		opts.ignoreFocusOut = true;
-		opts.placeHolder = "Input milliseconds";
-		opts.prompt = "save";
-		opts.value = config.interval().toString();
-		opts.title = "Target interval (ms)";
-		opts.validateInput = (text) => {
-			if (isNaN(parseInt(text))){
-				return "not a number, write only milliseconds";
-			}
-			return null;
-		};
-		let newInterval = await vscode.window.showInputBox(opts);
-		config.setInterval(parseInt(newInterval!));
-	});
+	let disposableSetIntervalCommand = vscode.commands.registerCommand("tava.setTargetInterval", onSetIntervalCommand);
 
 	context.subscriptions.push(disposableOpenAction);
 	context.subscriptions.push(disposableChangeAction);
 	context.subscriptions.push(disposableSetIntervalCommand);
 	context.subscriptions.push(disposableChangeActiveAction);
 
-	doTheMagic(undefined);
+	//doTheMagic(undefined);
+}
+
+async function onSetIntervalCommand() {
+	const config = new ConfigurationController();
+	let opts: vscode.InputBoxOptions = {};
+	opts.ignoreFocusOut = true;
+	opts.placeHolder = "Input milliseconds";
+	opts.prompt = "save";
+	opts.value = config.getInterval().toString();
+	opts.title = "Target interval (ms)";
+	opts.validateInput = (text) => {
+		if (isNaN(parseInt(text))){
+			return "not a number, write only milliseconds";
+		}
+		return null;
+	};
+	let newInterval = await vscode.window.showInputBox(opts);
+	config.setInterval(parseInt(newInterval!));
 }
 
 function doTheMagic(event: vscode.TextDocumentChangeEvent | vscode.TextDocument | vscode.TextEditor | undefined) {
@@ -64,6 +66,8 @@ function doTheMagic(event: vscode.TextDocumentChangeEvent | vscode.TextDocument 
 	
 	let editor = vscode.window.activeTextEditor;
 	let doc = editor?.document;
+
+	//what happens if event is undefined?
 	if (event !== undefined && "lineCount" in event) {
 		doc = event;
 	}
@@ -78,10 +82,10 @@ function doTheMagic(event: vscode.TextDocumentChangeEvent | vscode.TextDocument 
 	for (let i = 1; i < doc?.lineCount!; i++) {
 		date2 = Date.parse(doc?.lineAt(i).text.split(' ', 1)[0]!);
 		date1 = Date.parse(doc?.lineAt(i-1).text.split(' ', 1)[0]!);
-		if (Math.abs(date2-date1) > config.interval()) {
+		if (Math.abs(date2-date1) > config.getInterval().valueOf()) {
 			for (let j = anchor.line; j < i; j++) {
 				let range = new vscode.Range(new vscode.Position(j,0), new vscode.Position(j,doc?.lineAt(i-1).text.split(' ', 1)[0].length!));
-				flipflag?decorArray1.push({range}):decorArray2.push({range});
+				flipflag ? decorArray1.push({range}) : decorArray2.push({range});
 			}
 			anchor = new vscode.Position(i,0);
 			flipflag = !flipflag;

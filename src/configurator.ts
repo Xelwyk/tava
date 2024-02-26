@@ -1,20 +1,34 @@
+import { promises } from "dns";
+import { callbackify } from "util";
 import * as vscode from "vscode";
 
 class ConfigurationController {
     private configuration: vscode.WorkspaceConfiguration;
-    private targetInterval: Number;
     
     constructor() {
         this.configuration = vscode.workspace.getConfiguration("tava");
-        this.targetInterval = this.configuration.get("targetInterval") || 60000;
     }
 
-    public setInterval(interval: Number) {
-        this.configuration.update("targetInterval", interval, true);
+    public async setInterval(interval: Number) {
+        let result = false;
+        if (interval.valueOf() < 0 || !Number.isInteger(interval) || Number.isNaN(interval)) {
+            return result;
+        }
+        await this.configuration.update("targetInterval", interval, true).then(
+            (() => result = true),
+            (() => result = false)
+        );
+        return result;
     }
 
-    public interval(): Number {
-        return this.targetInterval;
+    public getInterval(): Number {
+        this.configuration = vscode.workspace.getConfiguration("tava");
+        let interval = this.configuration.get<Number>("targetInterval");
+        if (interval === undefined || interval === null) {
+            this.setInterval(60000);
+            interval = 60000;
+        }
+        return interval;
     }
 }
 
