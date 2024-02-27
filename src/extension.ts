@@ -21,12 +21,12 @@ export function activate(context: vscode.ExtensionContext) {
 	//note to self: timeout executes function after specified time
 	var timeoutId: NodeJS.Timeout;
 
-	let disposableOpenAction = vscode.workspace.onDidOpenTextDocument(doTheMagic);
-	let disposableChangeActiveAction = vscode.window.onDidChangeActiveTextEditor(doTheMagic);
+	let disposableOpenAction = vscode.workspace.onDidOpenTextDocument(painting);
+	let disposableChangeActiveAction = vscode.window.onDidChangeActiveTextEditor(painting);
 	let disposableChangeAction = vscode.workspace.onDidChangeTextDocument( event => {
 		clearTimeout(timeoutId);
 		timeoutId = setTimeout(() => {
-			doTheMagic(event);
+			painting(event);
 		}, 500);
 	});
 	let disposableSetIntervalCommand = vscode.commands.registerCommand("tava.setTargetInterval", onSetIntervalCommand);
@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposableSetIntervalCommand);
 	context.subscriptions.push(disposableChangeActiveAction);
 
-	//doTheMagic(undefined);
+	//painting(undefined);
 }
 
 async function onSetIntervalCommand() {
@@ -57,7 +57,7 @@ async function onSetIntervalCommand() {
 	config.setInterval(parseInt(newInterval!));
 }
 
-function doTheMagic(event: vscode.TextDocumentChangeEvent | vscode.TextDocument | vscode.TextEditor | undefined) {
+function painting(event: vscode.TextDocumentChangeEvent | vscode.TextDocument | vscode.TextEditor | undefined) {
 	console.log("magic happening");
 	
 	const config = new ConfigurationController();
