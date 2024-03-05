@@ -58,7 +58,7 @@ async function onSetIntervalCommand() {
 }
 
 function painting(event: vscode.TextDocumentChangeEvent | vscode.TextDocument | vscode.TextEditor | undefined) {
-	console.log("magic happening");
+	//console.log("magic happening");
 	
 	const config = new ConfigurationController();
 	

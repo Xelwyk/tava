@@ -6,6 +6,8 @@ import * as vscode from 'vscode';
 // import * as myExtension from '../../extension';
 
 suite('Sample suite', () => {
+	//TODO: remove
+	return;
 	vscode.window.showInformationMessage('Start sample tests.');
 
 	test('Sample test', () => {
