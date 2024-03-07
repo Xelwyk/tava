@@ -1,22 +1,16 @@
 import * as vscode from "vscode";
 import { StampMetadata } from "./ranger";
 
-class Sorter {
-    /**
-     * sort
-     */
+export class Sorter {
+    
     public sort(unsorted: Array<StampMetadata | null>) : Array<StampMetadata> {
         let sorted = new Array<StampMetadata>();
         unsorted.forEach((a) => {
-            if (a === null) {
-                
+            if (a !== null) {
+                sorted.push(a);
             }
         });
-        unsorted.sort((a, b) => {
-            a?.range.start.line.valueOf() - b?.range.start.line.valueOf();
-        });
+        sorted.sort((a, b) => a.range.start.line.valueOf() - b.range.start.line.valueOf());
         return sorted;
     }
 }
-
-export = Sorter;

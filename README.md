@@ -1,6 +1,6 @@
 # Tava README
 
->WARNING: this extension is in alpha
+>WARNING: this extension is in beta
 
 T.A.V.A.
 
@@ -23,18 +23,12 @@ with plugin, 60000ms target interval:
 
 ![example without plugin](images/022752.png)
 
-> Tip: target interval can be set through command palette, just search for "tava"
+Target interval can be set through command palette, just search for "tava"
 
 ## Requirements
 
 - VSCode
 - ISO 8601 timestamps
-
-## Installation
-
-`code --install-extension tava-x.x.x.vsix`
-
-_tava-x.x.x.vsix_ files are available in _dist_ directory
 
 ## Extension Settings
 
@@ -44,23 +38,9 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-I've never done anything in typescript and I've sacrificed my sleep to write this extension, so there are probably more _unknown_ issues than _known_
+I've never done anything in typescript, so there are probably more _unknown_ issues than _known_
 
-- doesn't know how to handle malformed lines
 - minimap doesn't want to color timestamp portions
-- codebase needs cleanup and improvement
-- possible memory leaks?
-
-## Release Notes
-
-### 1.0.1
-
-main.yml for automated packaging and readme tweaks
-
-### 1.0.0
-
-Initial release of T.A.V.A.
-
 
 ---
 

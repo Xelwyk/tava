@@ -1,7 +1,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import ConfigurationController = require("./configurator");
+import { ConfigurationController } from './configurator';
+import { Ranger, StampGroup } from './ranger';
+import { Grouper } from './grouper';
+import { Painter } from './painter';
+import { Sorter } from './sorter';
 
 let decoration1 = vscode.window.createTextEditorDecorationType({
 	backgroundColor: "#ffc20080",
@@ -36,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposableSetIntervalCommand);
 	context.subscriptions.push(disposableChangeActiveAction);
 
-	//painting(undefined);
+	painting(undefined);
 }
 
 async function onSetIntervalCommand() {
@@ -58,47 +62,51 @@ async function onSetIntervalCommand() {
 }
 
 function painting(event: vscode.TextDocumentChangeEvent | vscode.TextDocument | vscode.TextEditor | undefined) {
-	//console.log("magic happening");
+	console.log("looking for holes in timestamps");
 	
 	const config = new ConfigurationController();
 	
 	let editor = vscode.window.activeTextEditor;
-	let doc = editor?.document;
-
-	//what happens if event is undefined?
-	if (event !== undefined && "lineCount" in event) {
-		doc = event;
+	if (editor === undefined) {
+		return;
 	}
-	let anchor = new vscode.Position(0,0);
-	let date1 = 0;
-	let date2 = 0;
 	
-	let flipflag = true;
+	let document = editor.document;
+	if (event !== undefined && "lineCount" in event) {
+		document = event;
+	}
+
+	let text = editor.document.getText();
+	if (text === undefined || text === null) {
+		return;
+	}
+
+	let interval = config.getInterval().valueOf();
+	let ranger = new Ranger();
+	let sorter = new Sorter();
+	let grouper = new Grouper();
+	let painter = new Painter();
 	let decorArray1: vscode.DecorationOptions[] = [];
 	let decorArray2: vscode.DecorationOptions[] = [];
 
-	for (let i = 1; i < doc?.lineCount!; i++) {
-		date2 = Date.parse(doc?.lineAt(i).text.split(' ', 1)[0]!);
-		date1 = Date.parse(doc?.lineAt(i-1).text.split(' ', 1)[0]!);
-		if (Math.abs(date2-date1) > config.getInterval().valueOf()) {
-			for (let j = anchor.line; j < i; j++) {
-				let range = new vscode.Range(new vscode.Position(j,0), new vscode.Position(j,doc?.lineAt(i-1).text.split(' ', 1)[0].length!));
-				flipflag ? decorArray1.push({range}) : decorArray2.push({range});
-			}
-			anchor = new vscode.Position(i,0);
-			flipflag = !flipflag;
+	let stamps = sorter.sort(ranger.findStamps(text));
+	grouper.group(stamps, interval);
+	painter.prepareTextDecoration(stamps);
+
+	/*stamps.forEach(stamp => {
+		let range = stamp.range;
+		if (stamp.group === StampGroup.groupA) {
+			decorArray1.push({range});
+			editor?.setDecorations(decoration1, decorArray1);
+		} else {
+			decorArray2.push({range});
+			editor?.setDecorations(decoration2, decorArray2);
 		}
-	}
-
-	//go through last timestamp block
-	for (let i = anchor.line; i < doc?.lineCount!; i++) {
-		let range = new vscode.Range(new vscode.Position(i,0), new vscode.Position(i,doc?.lineAt(i-1).text.split(' ', 1)[0].length!));
-		flipflag?decorArray1.push({range}):decorArray2.push({range});
-	}
-
-	editor?.setDecorations(decoration1, decorArray1);
-	editor?.setDecorations(decoration2, decorArray2);
+	});*/
+	editor.setDecorations(decoration1, stamps.filter(stamp => stamp.group === StampGroup.groupA));
+	editor.setDecorations(decoration2, stamps.filter(stamp => stamp.group === StampGroup.groupB));
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
+

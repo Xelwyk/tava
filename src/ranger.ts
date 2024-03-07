@@ -1,13 +1,12 @@
 import * as vscode from 'vscode';
 export class Ranger {
-    constructor() {}
-    
-    public findStamps(input: String): Map<Number, StampMetadata> {
-        let foundStamps = new Map<Number, StampMetadata>();
+
+    public findStamps(input: String): Array<StampMetadata> {
+        let foundStamps = new Array<StampMetadata>();
         input.split("\n").forEach((line, lineIndex) => {
             let stamp = this.findSingleStamp(line, lineIndex);
             if (stamp !== null) {
-                foundStamps.set(lineIndex, stamp);
+                foundStamps.push(stamp);
             }
         });
         return foundStamps;
@@ -29,22 +28,33 @@ export class Ranger {
 
         let range = new vscode.Range(
             new vscode.Position(lineIndex.valueOf(), regexResult.index),
-            new vscode.Position(lineIndex.valueOf(), regexResult.index + (regexResult[0].length-1))
+            new vscode.Position(lineIndex.valueOf(), regexResult.index + (regexResult[0].length))
         );
-        return new StampMetadata(range);
+        return new StampMetadata(regexResult[0], range);
     }
+}
+
+export enum StampGroup {
+    groupA,
+    groupB,
 }
 
 export class StampMetadata {
     private stampPosition: vscode.Range;
+    private stamp: String;
+    public group: StampGroup | undefined;
+    public decorationType: vscode.TextEditorDecorationType | undefined;
 
-    constructor(range: vscode.Range) {
+    constructor(stamp: String, range: vscode.Range) {
         this.stampPosition = range;
+        this.stamp = stamp;
     }
     
     public get range() : vscode.Range {
         return this.stampPosition;
     }
     
-    
+    public get timestamp() : String {
+        return this.stamp;
+    }
 }

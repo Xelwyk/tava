@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 
-class ConfigurationController {
+export class ConfigurationController {
+    
     private configuration: vscode.WorkspaceConfiguration;
     
     constructor() {
@@ -29,5 +30,3 @@ class ConfigurationController {
         return interval;
     }
 }
-
-export = ConfigurationController;

@@ -4,15 +4,14 @@ import * as assert from 'assert';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import { Ranger, StampMetadata } from '../../ranger';
-import Sorter = require('../../sorter');
+import { Sorter } from '../../sorter';
 
 suite('Sorter Test Suite', () => {
     vscode.window.showInformationMessage('Start sorter test.');
 
-    test("Ranger line inspect test", () => {
+    test("Sorter sorting test", () => {
         const ranger = new Ranger();
         const sorter = new Sorter();
-        const multiline = "this is not timestamp";
         const stampStart = "2023-11-10T14:00:55.416759+01:00 this has stamp at start";
         const stampMiddle = "this has 2023-11-10T14:00:55.416759+01:00 stamp in the middle";
         const stampEnd = "this has stamp at the end 2023-11-10T14:00:55.416759+01:00";
