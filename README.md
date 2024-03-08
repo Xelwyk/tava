@@ -4,7 +4,9 @@
 
 T.A.V.A.
 
-Timestamp Analysis Visual Aid - color codes groups of ISO 8601 timestamps based on target interval
+Timestamp Analysis Visual Aid - color codes groups of ISO 8601 timestamps based on "hole" between timestamps (target interval).
+
+Currently only ISO 8601 date and time with offset are supported
 
 
 ## Features

@@ -9,6 +9,7 @@
 	"categories": [
 		"Other"
 	],
+	"icon": "images/tava.png",
 	"activationEvents": [
         "onStartupFinished"
 	],
