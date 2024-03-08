@@ -9,7 +9,7 @@
 	"categories": [
 		"Other"
 	],
-	"publisher": "Martin Lovrić",
+	"publisher": "MartinLovric",
 	"icon": "images/tava.png",
 	"activationEvents": [
         "onStartupFinished"
